@@ -1,0 +1,74 @@
+{
+  "name": "fusion-cache",
+  "version": "0.1.0",
+  "description": "Modern, extensible, driver-based caching framework for Node.js and Bun",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "bench": "tsx benchmarks/run.ts",
+    "prepublishOnly": "pnpm build && pnpm test && pnpm typecheck"
+  },
+  "peerDependencies": {
+    "smol-toml": "^1.3.0",
+    "yaml": "^2.6.0"
+  },
+  "peerDependenciesMeta": {
+    "yaml": {
+      "optional": true
+    },
+    "smol-toml": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@types/node": "^22.0.0",
+    "smol-toml": "^1.3.0",
+    "tinybench": "^6.0.2",
+    "tsup": "^8.3.0",
+    "tsx": "^4.22.4",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "yaml": "^2.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "cache",
+    "caching",
+    "memory-cache",
+    "file-cache",
+    "typescript",
+    "driver",
+    "pluggable",
+    "ttl",
+    "nodejs",
+    "bun"
+  ],
+  "license": "MIT"
+}

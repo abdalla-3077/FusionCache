@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fusion-cache — Modern Caching Framework for Node.js &amp; Bun</title>
+  <meta name="description" content="TypeScript-first, driver-based caching framework with human-readable TTL, zero runtime dependencies, and pluggable backends.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <a href="#" class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">fusion-cache</span>
+    </a>
+    <span class="version">v0.1.0</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-title">Getting Started</div>
+      <a href="#overview" class="nav-link active">Overview</a>
+      <a href="#installation" class="nav-link">Installation</a>
+      <a href="#quick-start" class="nav-link">Quick Start</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Core Concepts</div>
+      <a href="#configuration" class="nav-link">Configuration</a>
+      <a href="#ttl" class="nav-link">TTL</a>
+      <a href="#namespacing" class="nav-link">Namespacing</a>
+      <a href="#cache-aside" class="nav-link">Cache-Aside Pattern</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Drivers</div>
+      <a href="#memory-driver" class="nav-link">MemoryDriver</a>
+      <a href="#file-driver" class="nav-link">FileDriver</a>
+      <a href="#custom-drivers" class="nav-link">Custom Drivers</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Reference</div>
+      <a href="#api" class="nav-link">API Reference</a>
+      <a href="#types" class="nav-link">TypeScript Types</a>
+      <a href="#errors" class="nav-link">Error Handling</a>
+      <a href="#benchmarks" class="nav-link">Benchmarks</a>
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a href="https://github.com/abdalla-3077/FusionCache" target="_blank" class="sidebar-link">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
+    <a href="https://www.npmjs.com/package/fusion-cache" target="_blank" class="sidebar-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      npm
+    </a>
+  </div>
+</aside>
+
+<!-- Mobile menu toggle -->
+<button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<!-- Main Content -->
+<main class="content">
+
+  <!-- Hero -->
+  <section class="hero" id="overview">
+    <div class="hero-badge">TypeScript-first Caching Framework</div>
+    <h1>fusion-cache</h1>
+    <p class="hero-subtitle">Modern, extensible, driver-based caching for Node.js and Bun. Zero runtime dependencies. Beautiful developer experience.</p>
+
+    <div class="hero-actions">
+      <a href="#installation" class="btn btn-primary">Get Started</a>
+      <a href="#api" class="btn btn-secondary">API Reference</a>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>TypeScript First</h3>
+        <p>Full type safety with generics, IntelliSense, and strict typing throughout.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <h3>Zero Dependencies</h3>
+        <p>No runtime dependencies. Optional peer deps for YAML/TOML formats only.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔌</div>
+        <h3>Driver-Based</h3>
+        <p>Pluggable cache backends. Use MemoryDriver, FileDriver, or write your own.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏱️</div>
+        <h3>Human-Readable TTL</h3>
+        <p><code>"5s"</code>, <code>"30m"</code>, <code>"2h"</code>, <code>"1d"</code>, <code>"1w"</code> — no more raw milliseconds.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>ESM + CJS</h3>
+        <p>Dual module support. Tree-shakable. Works everywhere.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3>Async-First</h3>
+        <p>Promise-based API throughout. Perfect for modern async/await workflows.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation -->
+  <section id="installation">
+    <h2>Installation</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">bash</span>
+        <button class="copy-btn" data-copy="npm install fusion-cache">Copy</button>
+      </div>
+      <pre><code>npm install fusion-cache
+<span class="comment"># or</span>
+pnpm add fusion-cache
+<span class="comment"># or</span>
+yarn add fusion-cache</code></pre>
+    </div>
+
+    <p>For YAML or TOML file format support, install the optional peer dependency:</p>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">bash</span>
+        <button class="copy-btn" data-copy="pnpm add yaml">Copy</button>
+      </div>
+      <pre><code>pnpm add yaml      <span class="comment"># For YAML format</span>
+pnpm add smol-toml <span class="comment"># For TOML format</span></code></pre>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section id="quick-start">
+    <h2>Quick Start</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+        <button class="copy-btn" data-copy='import { FusionCache, MemoryDriver } from "fusion-cache";
+
+const cache = new FusionCache({
+  driver: new MemoryDriver(),
+});
+
+// Store with human-readable TTL
+await cache.set("user:1", { id: 1, name: "Alice" }, { ttl: "30m" });
+
+// Retrieve typed values
+const user = await cache.get("user:1");
+
+// Check existence
+if (await cache.has("user:1")) {
+  console.log("User cached");
+}
+
+// Delete
+await cache.delete("user:1");
+
+// Clear all
+await cache.clear();'>Copy</button>
+      </div>
+      <pre><code><span class="keyword">import</span> { FusionCache, MemoryDriver } <span class="keyword">from</span> <span class="string">'fusion-cache'</span>;
+
+<span class="keyword">const</span> cache = <span class="keyword">new</span> FusionCache({
+  driver: <span class="keyword">new</span> MemoryDriver(),
+});
+
+<span class="comment">// Store with human-readable TTL</span>
+<span class="keyword">await</span> cache.set(<span class="string">'user:1'</span>, { id: <span class="number">1</span>, name: <span class="string">'Alice'</span> }, { ttl: <span class="string">'30m'</span> });
+
+<span class="comment">// Retrieve typed values</span>
+<span class="keyword">const</span> user = <span class="keyword">await</span> cache.get&lt;{ id: <span class="type">number</span>; name: <span class="type">string</span> }&gt;(<span class="string">'user:1'</span>);
+
+<span class="comment">// Check existence</span>
+<span class="keyword">if</span> (<span class="keyword">await</span> cache.has(<span class="string">'user:1'</span>)) {
+  console.log(<span class="string">'User cached'</span>);
+}
+
+<span class="comment">// Delete</span>
+<span class="keyword">await</span> cache.delete(<span class="string">'user:1'</span>);
+
+<span class="comment">// Clear all</span>
+<span class="keyword">await</span> cache.clear();</code></pre>
+    </div>
+  </section>
+
+  <!-- Configuration -->
+  <section id="configuration">
+    <h2>Configuration</h2>
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+        <button class="copy-btn" data-copy='const cache = new FusionCache({
+  driver: myDriver,       // Required: any CacheDriver implementation
+  prefix: "app",          // Key prefix for namespacing (default: none)
+  defaultTTL: "1h",       // Default TTL for all entries (default: none)
+});'>Copy</button>
+      </div>
+      <pre><code><span class="keyword">const</span> cache = <span class="keyword">new</span> FusionCache({
+  driver: myDriver,       <span class="comment">// Required: any CacheDriver implementation</span>
+  prefix: <span class="string">'app'</span>,          <span class="comment">// Key prefix for namespacing (default: none)</span>
+  defaultTTL: <span class="string">'1h'</span>,       <span class="comment">// Default TTL for all entries (default: none)</span>
+});</code></pre>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>driver</code></td><td><code>CacheDriver</code></td><td>—</td><td>Required. The cache backend to use.</td></tr>
+        <tr><td><code>prefix</code></td><td><code>string</code></td><td><code>undefined</code></td><td>Key prefix for namespacing. Keys become <code>prefix:key</code>.</td></tr>
+        <tr><td><code>defaultTTL</code></td><td><code>number | HumanTTL</code></td><td><code>undefined</code></td><td>Default TTL applied to all <code>set</code> calls without explicit TTL.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TTL -->
+  <section id="ttl">
+    <h2>TTL (Time To Live)</h2>
+    <p>fusion-cache supports human-readable TTL strings alongside raw millisecond values:</p>
+
+    <table>
+      <thead>
+        <tr><th>Format</th><th>Meaning</th><th>Milliseconds</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>"5s"</code></td><td>5 seconds</td><td>5,000</td></tr>
+        <tr><td><code>"30m"</code></td><td>30 minutes</td><td>1,800,000</td></tr>
+        <tr><td><code>"2h"</code></td><td>2 hours</td><td>7,200,000</td></tr>
+        <tr><td><code>"1d"</code></td><td>1 day</td><td>86,400,000</td></tr>
+        <tr><td><code>"1w"</code></td><td>1 week</td><td>604,800,000</td></tr>
+        <tr><td><code>5000</code> (number)</td><td>5 seconds</td><td>5,000</td></tr>
+        <tr><td><code>0</code></td><td>No expiration</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+      </div>
+      <pre><code><span class="comment">// Human-readable</span>
+<span class="keyword">await</span> cache.set(<span class="string">'key'</span>, value, { ttl: <span class="string">'5m'</span> });
+
+<span class="comment">// Raw milliseconds</span>
+<span class="keyword">await</span> cache.set(<span class="string">'key'</span>, value, { ttl: <span class="number">300000</span> });
+
+<span class="comment">// No expiration</span>
+<span class="keyword">await</span> cache.set(<span class="string">'key'</span>, value, { ttl: <span class="number">0</span> });
+
+<span class="comment">// Parse TTL manually</span>
+<span class="keyword">import</span> { parseTTL } <span class="keyword">from</span> <span class="string">'fusion-cache'</span>;
+parseTTL(<span class="string">'30m'</span>); <span class="comment">// → 1800000</span></code></pre>
+    </div>
+  </section>
+
+  <!-- Namespacing -->
+  <section id="namespacing">
+    <h2>Namespacing</h2>
+    <p>Use the <code>prefix</code> option to namespace keys. All keys stored through a prefixed cache are automatically prefixed:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+      </div>
+      <pre><code><span class="keyword">const</span> userCache = <span class="keyword">new</span> FusionCache({ driver, prefix: <span class="string">'users'</span> });
+<span class="keyword">const</span> postCache = <span class="keyword">new</span> FusionCache({ driver, prefix: <span class="string">'posts'</span> });
+
+<span class="keyword">await</span> userCache.set(<span class="string">'1'</span>, userData);    <span class="comment">// Stored as "users:1"</span>
+<span class="keyword">await</span> postCache.set(<span class="string">'1'</span>, postData);    <span class="comment">// Stored as "posts:1"</span>
+
+<span class="comment">// Different caches, same key, no collision</span>
+<span class="keyword">await</span> userCache.get(<span class="string">'1'</span>); <span class="comment">// → userData</span>
+<span class="keyword">await</span> postCache.get(<span class="string">'1'</span>); <span class="comment">// → postData</span></code></pre>
+    </div>
+  </section>
+
+  <!-- Cache-Aside -->
+  <section id="cache-aside">
+    <h2>Cache-Aside Pattern</h2>
+    <p>The <code>getOrSet</code> method implements the cache-aside pattern. It returns the cached value if it exists, otherwise calls your factory function, stores the result, and returns it:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+      </div>
+      <pre><code><span class="keyword">const</span> user = <span class="keyword">await</span> cache.getOrSet(
+  <span class="string">`user:<span class="keyword">${</span>id<span class="keyword">}</span>`</span>,
+  <span class="keyword">async</span> () =&gt; <span class="keyword">await</span> db.users.findById(id),
+  { ttl: <span class="string">'5m'</span> }
+);</code></pre>
+    </div>
+
+    <div class="callout callout-info">
+      <strong>How it works:</strong> The factory function is only called on a cache miss. On subsequent calls with the same key, the cached value is returned without invoking the factory.
+    </div>
+  </section>
+
+  <!-- MemoryDriver -->
+  <section id="memory-driver">
+    <h2>MemoryDriver</h2>
+    <p>In-memory cache using <code>Map</code>. Zero configuration. Fastest option for hot data.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+        <button class="copy-btn" data-copy='import { MemoryDriver } from "fusion-cache";
+
+const driver = new MemoryDriver({
+  maxSize: 1000,       // Max entries (0 = unlimited, default: 0)
+  checkInterval: 60000 // Cleanup interval in ms (0 = no periodic cleanup)
+});'>Copy</button>
+      </div>
+      <pre><code><span class="keyword">import</span> { MemoryDriver } <span class="keyword">from</span> <span class="string">'fusion-cache'</span>;
+
+<span class="keyword">const</span> driver = <span class="keyword">new</span> MemoryDriver({
+  maxSize: <span class="number">1000</span>,       <span class="comment">// Max entries (0 = unlimited, default: 0)</span>
+  checkInterval: <span class="number">60000</span> <span class="comment">// Cleanup interval in ms (0 = no periodic cleanup)</span>
+});</code></pre>
+    </div>
+
+    <h3>Options</h3>
+    <table>
+      <thead>
+        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>maxSize</code></td><td><code>number</code></td><td><code>0</code></td><td>Maximum entries. FIFO eviction when exceeded. 0 = unlimited.</td></tr>
+        <tr><td><code>checkInterval</code></td><td><code>number</code></td><td><code>0</code></td><td>Periodic cleanup interval in ms. 0 = no periodic cleanup.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Behavior</h3>
+    <ul>
+      <li><strong>TTL Expiration:</strong> Lazy — entries are checked on access</li>
+      <li><strong>Eviction:</strong> FIFO when <code>maxSize</code> is exceeded</li>
+      <li><strong>Persistence:</strong> None — data lost on process exit</li>
+      <li><strong>Best for:</strong> Hot data, L1 cache, session data</li>
+    </ul>
+  </section>
+
+  <!-- FileDriver -->
+  <section id="file-driver">
+    <h2>FileDriver</h2>
+    <p>Persists cache to the filesystem. Write-through with in-memory cache layer. Supports JSON, YAML, and TOML formats.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+        <button class="copy-btn" data-copy='import { FileDriver } from "fusion-cache";
+
+const driver = new FileDriver({
+  path: ".cache",        // Directory path (default: ".cache")
+  format: "json",        // "json" | "yaml" | "toml"
+  flushInterval: 1000    // Debounce interval in ms (0 = flush on disconnect only)
+});
+
+await driver.connect();  // Creates directory and loads existing cache'>Copy</button>
+      </div>
+      <pre><code><span class="keyword">import</span> { FileDriver } <span class="keyword">from</span> <span class="string">'fusion-cache'</span>;
+
+<span class="keyword">const</span> driver = <span class="keyword">new</span> FileDriver({
+  path: <span class="string">'.cache'</span>,        <span class="comment">// Directory path (default: '.cache')</span>
+  format: <span class="string">'json'</span>,        <span class="comment">// 'json' | 'yaml' | 'toml'</span>
+  flushInterval: <span class="number">1000</span>    <span class="comment">// Debounce interval in ms (0 = flush on disconnect only)</span>
+});
+
+<span class="keyword">await</span> driver.connect();  <span class="comment">// Creates directory and loads existing cache</span></code></pre>
+    </div>
+
+    <h3>Options</h3>
+    <table>
+      <thead>
+        <tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>path</code></td><td><code>string</code></td><td><code>".cache"</code></td><td>Directory path for cache files.</td></tr>
+        <tr><td><code>format</code></td><td><code>"json" | "yaml" | "toml"</code></td><td><code>"json"</code></td><td>File format for persistence.</td></tr>
+        <tr><td><code>flushInterval</code></td><td><code>number</code></td><td><code>1000</code></td><td>Debounce interval in ms. 0 = flush only on disconnect.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Format Requirements</h3>
+    <table>
+      <thead>
+        <tr><th>Format</th><th>Dependency</th><th>Install</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>JSON</td><td>None (built-in)</td><td>—</td></tr>
+        <tr><td>YAML</td><td><code>yaml</code></td><td><code>pnpm add yaml</code></td></tr>
+        <tr><td>TOML</td><td><code>smol-toml</code></td><td><code>pnpm add smol-toml</code></td></tr>
+      </tbody>
+    </table>
+
+    <h3>Behavior</h3>
+    <ul>
+      <li><strong>Write-through:</strong> In-memory cache backed by filesystem</li>
+      <li><strong>Atomic writes:</strong> Uses tmp file + rename for crash safety</li>
+      <li><strong>Debounced flush:</strong> Batches I/O operations</li>
+      <li><strong>Long keys:</strong> Automatically hashed (SHA-256) when exceeding 200 chars</li>
+      <li><strong>Best for:</strong> Persistent config, L2 cache, cross-restart data</li>
+    </ul>
+
+    <div class="callout callout-warning">
+      <strong>Production tip:</strong> Use <code>MemoryDriver</code> for L1 (hot data) + <code>FileDriver</code> for L2 (persistence). The FileDriver's in-memory cache layer provides fast reads while the filesystem provides durability.
+    </div>
+  </section>
+
+  <!-- Custom Drivers -->
+  <section id="custom-drivers">
+    <h2>Custom Drivers</h2>
+    <p>Implement the <code>CacheDriver</code> interface to create your own backend:</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+      </div>
+      <pre><code><span class="keyword">import</span> <span class="keyword">type</span> { CacheDriver, CacheSetOptions } <span class="keyword">from</span> <span class="string">'fusion-cache'</span>;
+
+<span class="keyword">class</span> <span class="type">RedisDriver</span> <span class="keyword">implements</span> <span class="type">CacheDriver</span> {
+  <span class="keyword">async</span> get&lt;T&gt;(key: <span class="type">string</span>): Promise&lt;T | <span class="type">null</span>&gt; {
+    <span class="comment">// Your implementation</span>
+  }
+
+  <span class="keyword">async</span> set&lt;T&gt;(key: <span class="type">string</span>, value: T, options?: <span class="type">CacheSetOptions</span>): Promise&lt;<span class="type">void</span>&gt; {
+    <span class="comment">// Your implementation</span>
+  }
+
+  <span class="keyword">async</span> delete(key: <span class="type">string</span>): Promise&lt;<span class="type">boolean</span>&gt; {
+    <span class="comment">// Your implementation</span>
+  }
+
+  <span class="keyword">async</span> has(key: <span class="type">string</span>): Promise&lt;<span class="type">boolean</span>&gt; {
+    <span class="comment">// Your implementation</span>
+  }
+
+  <span class="keyword">async</span> clear(): Promise&lt;<span class="type">void</span>&gt; {
+    <span class="comment">// Your implementation</span>
+  }
+
+  <span class="comment">// Optional methods</span>
+  <span class="keyword">async</span> keys(pattern?: <span class="type">string</span>): Promise&lt;<span class="type">string</span>[]&gt; {
+    <span class="comment">// Your implementation</span>
+  }
+
+  <span class="keyword">async</span> connect(): Promise&lt;<span class="type">void</span>&gt; {
+    <span class="comment">// Initialize connection</span>
+  }
+
+  <span class="keyword">async</span> disconnect(): Promise&lt;<span class="type">void</span>&gt; {
+    <span class="comment">// Clean up connection</span>
+  }
+}</code></pre>
+    </div>
+
+    <h3>Interface Contract</h3>
+    <table>
+      <thead>
+        <tr><th>Method</th><th>Required</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>get&lt;T&gt;(key)</code></td><td>Yes</td><td>Return cached value or <code>null</code></td></tr>
+        <tr><td><code>set&lt;T&gt;(key, value, options?)</code></td><td>Yes</td><td>Store value with optional TTL</td></tr>
+        <tr><td><code>delete(key)</code></td><td>Yes</td><td>Remove key, return <code>true</code> if existed</td></tr>
+        <tr><td><code>has(key)</code></td><td>Yes</td><td>Check if key exists (not expired)</td></tr>
+        <tr><td><code>clear()</code></td><td>Yes</td><td>Remove all entries</td></tr>
+        <tr><td><code>keys(pattern?)</code></td><td>No</td><td>List keys with optional <code>*</code> wildcard</td></tr>
+        <tr><td><code>connect()</code></td><td>No</td><td>Initialize driver</td></tr>
+        <tr><td><code>disconnect()</code></td><td>No</td><td>Clean up resources</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- API Reference -->
+  <section id="api">
+    <h2>API Reference</h2>
+
+    <div class="api-class">
+      <h3><code>FusionCache</code></h3>
+      <p>The main cache class. Wraps a driver and adds key prefixing, default TTL, and the cache-aside pattern.</p>
+
+      <h4>Constructor</h4>
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">TypeScript</span></div>
+        <pre><code><span class="keyword">new</span> FusionCache(options: <span class="type">FusionCacheOptions</span>)</code></pre>
+      </div>
+
+      <h4>Methods</h4>
+      <table>
+        <thead>
+          <tr><th>Method</th><th>Signature</th><th>Returns</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>get</code></td>
+            <td><code>get&lt;T&gt;(key: string): Promise&lt;T | null&gt;</code></td>
+            <td><code>T | null</code></td>
+            <td>Retrieve a cached value by key</td>
+          </tr>
+          <tr>
+            <td><code>set</code></td>
+            <td><code>set&lt;T&gt;(key: string, value: T, options?: CacheSetOptions): Promise&lt;void&gt;</code></td>
+            <td><code>void</code></td>
+            <td>Store a value with optional TTL</td>
+          </tr>
+          <tr>
+            <td><code>delete</code></td>
+            <td><code>delete(key: string): Promise&lt;boolean&gt;</code></td>
+            <td><code>boolean</code></td>
+            <td>Remove a key. Returns <code>true</code> if it existed</td>
+          </tr>
+          <tr>
+            <td><code>has</code></td>
+            <td><code>has(key: string): Promise&lt;boolean&gt;</code></td>
+            <td><code>boolean</code></td>
+            <td>Check if a key exists and is not expired</td>
+          </tr>
+          <tr>
+            <td><code>clear</code></td>
+            <td><code>clear(): Promise&lt;void&gt;</code></td>
+            <td><code>void</code></td>
+            <td>Remove all entries from the driver</td>
+          </tr>
+          <tr>
+            <td><code>keys</code></td>
+            <td><code>keys(pattern?: string): Promise&lt;string[]&gt;</code></td>
+            <td><code>string[]</code></td>
+            <td>List keys matching a pattern (<code>*</code> wildcard)</td>
+          </tr>
+          <tr>
+            <td><code>getOrSet</code></td>
+            <td><code>getOrSet&lt;T&gt;(key: string, factory: () =&gt; Promise&lt;T&gt;, options?: GetOrSetOptions): Promise&lt;T&gt;</code></td>
+            <td><code>T</code></td>
+            <td>Cache-aside: return cached or call factory, store, and return</td>
+          </tr>
+          <tr>
+            <td><code>connect</code></td>
+            <td><code>connect(): Promise&lt;void&gt;</code></td>
+            <td><code>void</code></td>
+            <td>Initialize the underlying driver</td>
+          </tr>
+          <tr>
+            <td><code>disconnect</code></td>
+            <td><code>disconnect(): Promise&lt;void&gt;</code></td>
+            <td><code>void</code></td>
+            <td>Clean up driver resources</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- TypeScript Types -->
+  <section id="types">
+    <h2>TypeScript Types</h2>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+      </div>
+      <pre><code><span class="comment">// Human-readable TTL format</span>
+<span class="keyword">type</span> <span class="type">HumanTTL</span> =
+  | <span class="string">`${number}s`</span>  <span class="comment">// seconds</span>
+  | <span class="string">`${number}m`</span>  <span class="comment">// minutes</span>
+  | <span class="string">`${number}h`</span>  <span class="comment">// hours</span>
+  | <span class="string">`${number}d`</span>  <span class="comment">// days</span>
+  | <span class="string">`${number}w`</span>; <span class="comment">// weeks</span>
+
+<span class="comment">// Cache driver interface</span>
+<span class="keyword">interface</span> <span class="type">CacheDriver</span> {
+  connect?(): Promise&lt;<span class="type">void</span>&gt;;
+  disconnect?(): Promise&lt;<span class="type">void</span>&gt;;
+  get&lt;T&gt;(key: <span class="type">string</span>): Promise&lt;T | <span class="type">null</span>&gt;;
+  set&lt;T&gt;(key: <span class="type">string</span>, value: T, options?: <span class="type">CacheSetOptions</span>): Promise&lt;<span class="type">void</span>&gt;;
+  delete(key: <span class="type">string</span>): Promise&lt;<span class="type">boolean</span>&gt;;
+  has(key: <span class="type">string</span>): Promise&lt;<span class="type">boolean</span>&gt;;
+  clear(): Promise&lt;<span class="type">void</span>&gt;;
+  keys?(pattern?: <span class="type">string</span>): Promise&lt;<span class="type">string</span>[]&gt;;
+}
+
+<span class="comment">// Set options</span>
+<span class="keyword">interface</span> <span class="type">CacheSetOptions</span> {
+  ttl?: <span class="type">number</span> | <span class="type">HumanTTL</span>;
+  tags?: <span class="type">string</span>[];
+}
+
+<span class="comment">// Cache constructor options</span>
+<span class="keyword">interface</span> <span class="type">FusionCacheOptions</span> {
+  driver: <span class="type">CacheDriver</span>;
+  prefix?: <span class="type">string</span>;
+  defaultTTL?: <span class="type">number</span> | <span class="type">HumanTTL</span>;
+}
+
+<span class="comment">// MemoryDriver options</span>
+<span class="keyword">interface</span> <span class="type">MemoryDriverOptions</span> {
+  maxSize?: <span class="type">number</span>;
+  checkInterval?: <span class="type">number</span>;
+}
+
+<span class="comment">// FileDriver options</span>
+<span class="keyword">type</span> <span class="type">FileFormat</span> = <span class="string">'json'</span> | <span class="string">'yaml'</span> | <span class="string">'toml'</span>;
+
+<span class="keyword">interface</span> <span class="type">FileDriverOptions</span> {
+  path?: <span class="type">string</span>;
+  format?: <span class="type">FileFormat</span>;
+  flushInterval?: <span class="type">number</span>;
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- Error Handling -->
+  <section id="errors">
+    <h2>Error Handling</h2>
+    <p>fusion-cache provides a typed error hierarchy:</p>
+
+    <div class="error-tree">
+      <div class="error-item error-base">
+        <code>FusionCacheError</code>
+        <span class="error-desc">Base error for all fusion-cache errors</span>
+      </div>
+      <div class="error-item error-child">
+        <code>InvalidTTLInputError</code>
+        <span class="error-desc">Invalid TTL format (e.g., <code>"abc"</code>)</span>
+      </div>
+      <div class="error-item error-child">
+        <code>DriverConnectionError</code>
+        <span class="error-desc">Driver failed to connect</span>
+      </div>
+      <div class="error-item error-child">
+        <code>DriverNotSupportedError</code>
+        <span class="error-desc">Driver doesn't support a required operation</span>
+      </div>
+      <div class="error-item error-child">
+        <code>FileDriverError</code>
+        <span class="error-desc">FileDriver-specific errors (missing deps, I/O)</span>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <span class="code-lang">TypeScript</span>
+      </div>
+      <pre><code><span class="keyword">import</span> {
+  FusionCacheError,
+  InvalidTTLInputError,
+  DriverConnectionError,
+  FileDriverError,
+} <span class="keyword">from</span> <span class="string">'fusion-cache'</span>;
+
+<span class="keyword">try</span> {
+  <span class="keyword">await</span> cache.set(<span class="string">'key'</span>, <span class="string">'value'</span>, { ttl: <span class="string">'invalid'</span> });
+} <span class="keyword">catch</span> (error) {
+  <span class="keyword">if</span> (error <span class="keyword">instanceof</span> InvalidTTLInputError) {
+    console.error(<span class="string">'Bad TTL format'</span>);
+  }
+}</code></pre>
+    </div>
+  </section>
+
+  <!-- Benchmarks -->
+  <section id="benchmarks">
+    <h2>Benchmarks</h2>
+    <p>Run <code>pnpm bench</code> to generate fresh results for your hardware.</p>
+
+    <h3>MemoryDriver</h3>
+    <table>
+      <thead>
+        <tr><th>Operation</th><th>Ops/sec</th><th>Avg (ms)</th><th>p75 (ms)</th><th>p99 (ms)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>set</code></td><td>2,288,777</td><td>0.5571</td><td>0.4670</td><td>2.2590</td></tr>
+        <tr><td><code>get</code></td><td>2,604,599</td><td>0.4520</td><td>0.3980</td><td>1.0270</td></tr>
+        <tr><td><code>has</code></td><td>2,931,029</td><td>0.4080</td><td>0.3640</td><td>0.9570</td></tr>
+        <tr><td><code>delete</code></td><td>1,567,415</td><td>0.8213</td><td>0.6860</td><td>3.8710</td></tr>
+        <tr><td><code>getOrSet</code></td><td>1,842,709</td><td>0.6611</td><td>0.5590</td><td>1.4600</td></tr>
+      </tbody>
+    </table>
+
+    <h3>FileDriver (JSON)</h3>
+    <table>
+      <thead>
+        <tr><th>Operation</th><th>Ops/sec</th><th>Avg (ms)</th><th>p75 (ms)</th><th>p99 (ms)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>set</code></td><td>2,294,832</td><td>0.5248</td><td>0.4660</td><td>1.2060</td></tr>
+        <tr><td><code>get</code></td><td>2,523,988</td><td>0.4603</td><td>0.4090</td><td>1.0520</td></tr>
+        <tr><td><code>has</code></td><td>2,750,571</td><td>0.4323</td><td>0.3850</td><td>1.0850</td></tr>
+        <tr><td><code>delete</code></td><td>1,558,275</td><td>0.7914</td><td>0.6920</td><td>1.7060</td></tr>
+        <tr><td><code>getOrSet</code></td><td>1,818,262</td><td>0.6475</td><td>0.5650</td><td>1.4090</td></tr>
+      </tbody>
+    </table>
+
+    <h3>FileDriver (YAML)</h3>
+    <table>
+      <thead>
+        <tr><th>Operation</th><th>Ops/sec</th><th>Avg (ms)</th><th>p75 (ms)</th><th>p99 (ms)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>set</code></td><td>2,282,203</td><td>0.5276</td><td>0.4710</td><td>1.2320</td></tr>
+        <tr><td><code>get</code></td><td>2,516,454</td><td>0.4572</td><td>0.4080</td><td>1.0270</td></tr>
+      </tbody>
+    </table>
+
+    <h3>FileDriver (TOML)</h3>
+    <table>
+      <thead>
+        <tr><th>Operation</th><th>Ops/sec</th><th>Avg (ms)</th><th>p75 (ms)</th><th>p99 (ms)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>set</code></td><td>2,295,488</td><td>0.5312</td><td>0.4670</td><td>1.2260</td></tr>
+        <tr><td><code>get</code></td><td>2,508,667</td><td>0.4660</td><td>0.4090</td><td>1.0940</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-info">
+      <strong>Note:</strong> FileDriver benchmarks reflect the write-through in-memory cache performance. Actual filesystem I/O only occurs on <code>disconnect()</code> or flush interval. In production, use <code>MemoryDriver</code> for L1 (hot data) + <code>FileDriver</code> for L2 (persistence).
+    </div>
+
+    <h3>Driver Comparison</h3>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>MemoryDriver</th><th>FileDriver</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Persistence</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Read Speed</td><td>~2.6M ops/sec</td><td>~2.5M ops/sec</td></tr>
+        <tr><td>Write Speed</td><td>~2.3M ops/sec</td><td>~2.3M ops/sec</td></tr>
+        <tr><td>Max Size / Eviction</td><td>Yes (FIFO)</td><td>No</td></tr>
+        <tr><td>Periodic Cleanup</td><td>Yes</td><td>No</td></tr>
+        <tr><td>Multi-Format</td><td>N/A</td><td>JSON/YAML/TOML</td></tr>
+        <tr><td>Zero Dependencies</td><td>Yes</td><td>Yes (JSON)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Released under the <a href="https://github.com/abdalla/FusionCache/blob/main/LICENSE" target="_blank">MIT License</a>.</p>
+    <p>Copyright 2026 Abdalla.</p>
+  </footer>
+
+</main>
+
+<script src="main.js"></script>
+</body>
+</html>

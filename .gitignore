@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-cjs/
+*.tsbuildinfo
+
+# Coverage & test artifacts
+coverage/
+.nyc_output/
+
+# Turbo
+.turbo/
+
+# Cache (FileDriver runtime data)
+.cache/
+.cache-*/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Debug
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Lock files (keep pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+
+examples/
+benchmarks/
