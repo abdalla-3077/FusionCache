@@ -1,6 +1,6 @@
 {
   "name": "fusion-cache",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Modern, extensible, driver-based caching framework for Node.js and Bun",
   "homepage": "https://abdalla-3077.github.io/FusionCache/",
   "repository": {
@@ -26,7 +26,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
