@@ -2,6 +2,14 @@
   "name": "fusion-cache",
   "version": "0.1.0",
   "description": "Modern, extensible, driver-based caching framework for Node.js and Bun",
+  "homepage": "https://abdalla-3077.github.io/FusionCache/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abdalla-3077/FusionCache.git"
+  },
+  "bugs": {
+    "url": "https://github.com/abdalla-3077/FusionCache/issues"
+  },
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
